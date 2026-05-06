@@ -1,0 +1,95 @@
+// Configuration de la source de données (SQLite imposé par le projet)
+datasource db {
+  provider = "sqlite"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 1. Modèle Utilisateur
+model User {
+  id           Int               @id @default(autoincrement())
+  pseudo       String
+  email        String            @unique
+  avatar_url   String?           // Champ optionnel
+  createdAt    DateTime          @default(now())
+  
+  games        Game[]
+  achievements UserAchievement[]
+}
+
+// 2. Modèle Catégorie
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  
+  words       Word[]
+}
+
+// 3. Modèle Difficulté
+model Difficulty {
+  id               Int      @id @default(autoincrement())
+  level_name       String   @unique // ex: Facile, Moyen, Difficile
+  max_errors       Int      @default(7)
+  score_multiplier Float    @default(1.0)
+  
+  words            Word[]
+  games            Game[]
+}
+
+// 4. Modèle Mot
+model Word {
+  id           Int        @id @default(autoincrement())
+  text         String
+  hint         String?
+  
+  categoryId   Int
+  category     Category   @relation(fields: [categoryId], references: [id])
+  
+  difficultyId Int
+  difficulty   Difficulty @relation(fields: [difficultyId], references: [id])
+  
+  games        Game[]
+}
+
+// 5. Modèle Partie (Game)
+model Game {
+  id           Int        @id @default(autoincrement())
+  errors_count Int        @default(0)
+  status       String     // "GAGNE", "PERDU", "EN_COURS"
+  score        Int        @default(0)
+  playedAt     DateTime   @default(now())
+
+  userId       Int
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  wordId       Int
+  word         Word       @relation(fields: [wordId], references: [id])
+  
+  difficultyId Int
+  difficulty   Difficulty @relation(fields: [difficultyId], references: [id])
+}
+
+// 6. Modèle Succès (Achievement)
+model Achievement {
+  id          Int               @id @default(autoincrement())
+  name        String            @unique
+  description String
+  icon_name   String?
+  
+  users       UserAchievement[]
+}
+
+// 7. Table de jonction N:M (Exigence majeure)
+model UserAchievement {
+  userId        Int
+  achievementId Int
+  earnedAt      DateTime  @default(now())
+
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@id([userId, achievementId])
+}
