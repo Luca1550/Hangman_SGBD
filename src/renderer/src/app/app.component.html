@@ -1,0 +1,18 @@
+<main style="padding: 20px; font-family: sans-serif;">
+  <h1>Bienvenue dans le Jeu du Pendu !</h1>
+
+  <h2>Liste des catégories disponibles :</h2>
+
+  <!-- On utilise la nouvelle syntaxe @for d'Angular -->
+  <ul>
+    @for (category of dbService.categories(); track category.id) {
+      <li>
+        <strong>{{ category.name }}</strong> : {{ category.description }}
+      </li>
+    } @empty {
+      <li>Chargement des catégories...</li>
+    }
+  </ul>
+</main>
+
+<router-outlet></router-outlet>
