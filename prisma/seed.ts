@@ -1,5 +1,8 @@
 import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3'
+
+const adapter = new PrismaBetterSqlite3({ url: 'file:./dev.db' })
+const prisma = new PrismaClient({ adapter })
 
 async function main() {
   console.log('Début du peuplement de la base de données...')
@@ -50,7 +53,6 @@ async function main() {
 main()
   .catch((e) => {
     console.error(e)
-    process.exit(1)
   })
   .finally(async () => {
     await prisma.$disconnect()

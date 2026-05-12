@@ -11,11 +11,11 @@ declare global {
 
 // 2. On crée le Service Angular
 @Injectable({
-  providedIn: 'root' // (Exigence validée : Singleton injecté à la racine)
+  providedIn: 'root' // (Singleton injecté à la racine)
 })
 export class DatabaseService {
   
-  // 3. On utilise un Signal pour stocker nos catégories (Exigence validée !)
+  // 3. On utilise un Signal pour stocker nos catégories 
   categories = signal<any[]>([]);
 
   constructor() { }
