@@ -22,15 +22,24 @@
   <!-- Si un mot a été tiré au sort, on l'affiche -->
   @if (dbService.currentWord()) {
     <div style="margin-top: 20px; padding: 20px; background-color: #f0f0f0; border-radius: 8px;">
-      <h3>Mot à deviner :</h3>
-      <!-- On simule les tirets pour le moment en remplaçant les lettres par des _ -->
-      <p style="font-size: 32px; letter-spacing: 5px; font-family: monospace;">
-        <!-- Exigence PDF : utilisation de la syntaxe @for pour itérer sur les lettres -->
-        @for (letter of dbService.currentWord().text.split(''); track $index) {
-          _ 
-        }
-      </p>
-      <p style="color: gray; font-size: 14px;">Indice : {{ dbService.currentWord().hint || 'Aucun indice' }}</p>
+      
+      <!-- Affichage du nombre d'erreurs (via le computed) -->
+      <h3 style="color: darkred;">Erreurs : {{ dbService.errorCount() }}</h3>
+
+      <!-- Notre nouveau composant Game Board -->
+      <app-game-board 
+        [word]="dbService.currentWord()" 
+        [guessedLetters]="dbService.guessedLetters()">
+      </app-game-board>
+
+      <hr style="margin: 20px 0;">
+
+      <!-- Notre nouveau composant Keyboard -->
+      <app-keyboard 
+        [disabledLetters]="dbService.guessedLetters()"
+        (letterPlayed)="onPlayLetter($event)">
+      </app-keyboard>
+
     </div>
   }
 </main>

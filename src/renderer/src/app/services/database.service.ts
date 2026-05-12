@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
 
 // 1. On explique à TypeScript que notre Preload a ajouté "electronAPI" à l'objet window
 declare global {
@@ -19,10 +19,22 @@ export class DatabaseService {
   // 3. On utilise des Signals pour stocker nos données
   categories = signal<any[]>([]);
   currentWord = signal<any | null>(null); // Pour stocker le mot de la partie en cours
+  guessedLetters = signal<string[]>([]); // Mémoire des lettres jouées
+
+  // 4. EXIGENCE PDF : computed()
+  // Recalcule le nombre d'erreurs automatiquement si le mot ou les lettres jouées changent
+  errorCount = computed(() => {
+    const word = this.currentWord();
+    const guesses = this.guessedLetters();
+    if (!word) return 0;
+    
+    // Compte le nombre de lettres devinées qui ne sont pas dans le mot
+    return guesses.filter(letter => !word.text.includes(letter)).length;
+  });
 
   constructor() { }
 
-  // 4. Les fonctions qui appellent le backend
+  // 5. Les fonctions qui appellent le backend
   async loadCategories() {
     try {
       // vers le preload
@@ -38,9 +50,16 @@ export class DatabaseService {
     try {
       const word = await window.electronAPI.getRandomWord();
       this.currentWord.set(word);
+      this.guessedLetters.set([]); // Réinitialiser les lettres pour la nouvelle partie
       console.log("Nouveau mot tiré au sort :", word);
     } catch (error) {
       console.error("Erreur tirage mot :", error);
     }
+  }
+
+  // 6. Action de jeu
+  playLetter(letter: string) {
+    if (this.guessedLetters().includes(letter)) return;
+    this.guessedLetters.update(letters => [...letters, letter]);
   }
 }
