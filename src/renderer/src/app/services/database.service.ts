@@ -5,6 +5,7 @@ declare global {
   interface Window {
     electronAPI: {
       getCategories: () => Promise<any[]>;
+      getRandomWord: () => Promise<any>;
     }
   }
 }
@@ -15,22 +16,31 @@ declare global {
 })
 export class DatabaseService {
   
-  // 3. On utilise un Signal pour stocker nos catégories 
+  // 3. On utilise des Signals pour stocker nos données
   categories = signal<any[]>([]);
+  currentWord = signal<any | null>(null); // Pour stocker le mot de la partie en cours
 
   constructor() { }
 
-  // 4. La fonction qui va appeler notre backend (Electron -> Prisma)
+  // 4. Les fonctions qui appellent le backend
   async loadCategories() {
     try {
-      // On passe par le pont sécurisé !
+      // vers le preload
       const data = await window.electronAPI.getCategories();
-      
-      // On met à jour notre Signal avec les données reçues
+      //MAJ de ce qui est reçu
       this.categories.set(data);
-      console.log("Catégories chargées dans Angular :", data);
     } catch (error) {
-      console.error("Erreur de communication avec Electron :", error);
+      console.error("Erreur catégories :", error);
+    }
+  }
+
+  async startNewGame() {
+    try {
+      const word = await window.electronAPI.getRandomWord();
+      this.currentWord.set(word);
+      console.log("Nouveau mot tiré au sort :", word);
+    } catch (error) {
+      console.error("Erreur tirage mot :", error);
     }
   }
 }

@@ -2,17 +2,37 @@
   <h1>Bienvenue dans le Jeu du Pendu !</h1>
 
   <h2>Liste des catégories disponibles :</h2>
-
-  <!-- On utilise la nouvelle syntaxe @for d'Angular -->
   <ul>
     @for (category of dbService.categories(); track category.id) {
       <li>
         <strong>{{ category.name }}</strong> : {{ category.description }}
       </li>
     } @empty {
-      <li>Aucune Catégorie...</li>
+      <li>Chargement des catégories...</li>
     }
   </ul>
+
+  <hr style="margin: 20px 0;">
+
+  <h2>Zone de Jeu</h2>
+  <button (click)="onStartGame()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">
+    Tirer un mot au hasard
+  </button>
+
+  <!-- Si un mot a été tiré au sort, on l'affiche -->
+  @if (dbService.currentWord()) {
+    <div style="margin-top: 20px; padding: 20px; background-color: #f0f0f0; border-radius: 8px;">
+      <h3>Mot à deviner :</h3>
+      <!-- On simule les tirets pour le moment en remplaçant les lettres par des _ -->
+      <p style="font-size: 32px; letter-spacing: 5px; font-family: monospace;">
+        <!-- Exigence PDF : utilisation de la syntaxe @for pour itérer sur les lettres -->
+        @for (letter of dbService.currentWord().text.split(''); track $index) {
+          _ 
+        }
+      </p>
+      <p style="color: gray; font-size: 14px;">Indice : {{ dbService.currentWord().hint || 'Aucun indice' }}</p>
+    </div>
+  }
 </main>
 
 <router-outlet></router-outlet>

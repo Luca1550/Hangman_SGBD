@@ -35,6 +35,28 @@ ipcMain.handle('db:get-categories', async () => {
     }
 })
 
+// 5. On crée un canal pour demander un mot aléatoire
+ipcMain.handle('db:get-random-word', async () => {
+    try {
+        // A. On compte combien de mots existent dans la base
+        const count = await prisma.word.count();
+        if (count === 0) return null;
+
+        // B. On choisit un index au hasard
+        const randomIndex = Math.floor(Math.random() * count);
+
+        // C. On va chercher le mot qui correspond à cet index
+        const randomWord = await prisma.word.findFirst({
+            skip: randomIndex,
+        });
+
+        return randomWord;
+    } catch (error) {
+        console.error("Erreur récupération mot: ", error);
+        return null;
+    }
+});
+
 app.whenReady().then(() => {
     createWindow();
 

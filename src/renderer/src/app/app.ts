@@ -19,4 +19,9 @@ export class App implements OnInit {
   ngOnInit() {
     this.dbService.loadCategories();
   }
+
+  // Fonction appelée par le clic sur le bouton dans le HTML
+  onStartGame() {
+    this.dbService.startNewGame();
+  }
 }
