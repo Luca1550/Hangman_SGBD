@@ -4,6 +4,6 @@ import {contextBridge, ipcRenderer} from 'electron'
 contextBridge.exposeInMainWorld('electronAPI',{
     // On crée une fonction que Angular pourra appeler : getCategories()
     // Elle envoie un message nommé 'db:get-categories' au processus principal (Main)
-    getCategories: () => ipcRenderer.invoke('db:get-categories')
+    getCategories: () => ipcRenderer.invoke('db:get-categories'),
     getRandomWord: () => ipcRenderer.invoke('db:get-random-word')
 })
