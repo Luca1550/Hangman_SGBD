@@ -8,11 +8,12 @@ import { CommonModule } from '@angular/common'; // Requis pour le pipe 'date'
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div style="padding: 20px;">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2>Historique de {{ playerData()?.pseudo }}</h2>
-        <button (click)="goBack()" style="padding: 5px 10px; cursor: pointer;">Retour au jeu</button>
-      </div>
+    <button (click)="goBack()" style="position: absolute; top: 20px; left: 20px; padding: 10px 15px; font-weight: bold; cursor: pointer; background: #ddd; border: 1px solid #aaa; border-radius: 5px;">
+      ⬅ Retour
+    </button>
+
+    <div style="padding: 20px; margin-top: 40px;">
+      <h2>Historique de {{ playerData()?.pseudo }}</h2>
 
       @if (playerData()) {
         <h3>Parties jouées : {{ playerData().games.length }}</h3>

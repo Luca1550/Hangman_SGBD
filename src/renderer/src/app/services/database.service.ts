@@ -11,6 +11,13 @@ declare global {
       getPlayerHistory: (userId: number) => Promise<any>;
       getUsers: () => Promise<any[]>;
       deleteUser: (userId: number) => Promise<boolean>;
+      getWords: () => Promise<any[]>;
+      addWord: (data: any) => Promise<any>;
+      updateWord: (data: any) => Promise<any>;
+      deleteWord: (id: number) => Promise<boolean>;
+      getDifficulties: () => Promise<any[]>;
+      addCategory: (name: string) => Promise<any>;
+      deleteCategory: (id: number) => Promise<{success: boolean, message?: string}>;
     }
   }
 }
@@ -121,6 +128,36 @@ export class DatabaseService {
       console.error("Erreur suppression :", error);
       return false;
     }
+  }
+
+  // --- CRUD Mots ---
+  async getWords() {
+    return await window.electronAPI.getWords();
+  }
+  async addWord(data: any) {
+    return await window.electronAPI.addWord(data);
+  }
+  async updateWord(data: any) {
+    return await window.electronAPI.updateWord(data);
+  }
+  async deleteWord(id: number) {
+    return await window.electronAPI.deleteWord(id);
+  }
+  async getDifficulties() {
+    return await window.electronAPI.getDifficulties();
+  }
+
+  async addCategory(name: string) {
+    try {
+      return await window.electronAPI.addCategory(name);
+    } catch (error) {
+      console.error("Erreur création catégorie :", error);
+      return null;
+    }
+  }
+
+  async deleteCategory(id: number) {
+    return await window.electronAPI.deleteCategory(id);
   }
 
   async loadCategories() {

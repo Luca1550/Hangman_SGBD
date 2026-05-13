@@ -10,5 +10,14 @@ contextBridge.exposeInMainWorld('electronAPI',{
     saveGame: (data: any) => ipcRenderer.invoke('db:save-game', data),
     getPlayerHistory: (userId: number) => ipcRenderer.invoke('db:get-player-history', userId),
     getUsers: () => ipcRenderer.invoke('db:get-users'),
-    deleteUser: (userId: number) => ipcRenderer.invoke('db:delete-user', userId)
+    deleteUser: (userId: number) => ipcRenderer.invoke('db:delete-user', userId),
+    
+    // CRUD Mots
+    getWords: () => ipcRenderer.invoke('db:get-words'),
+    addWord: (data: any) => ipcRenderer.invoke('db:add-word', data),
+    updateWord: (data: any) => ipcRenderer.invoke('db:update-word', data),
+    deleteWord: (id: number) => ipcRenderer.invoke('db:delete-word', id),
+    getDifficulties: () => ipcRenderer.invoke('db:get-difficulties'),
+    addCategory: (name: string) => ipcRenderer.invoke('db:add-category', name),
+    deleteCategory: (id: number) => ipcRenderer.invoke('db:delete-category', id)
 })

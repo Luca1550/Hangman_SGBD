@@ -9,8 +9,13 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [GameBoardComponent, KeyboardComponent],
   template: `
+    <!-- Bouton de retour en haut à gauche -->
+    <button (click)="goHome()" style="position: absolute; top: 20px; left: 20px; padding: 10px 15px; font-weight: bold; cursor: pointer; background: #ddd; border: 1px solid #aaa; border-radius: 5px;">
+      ⬅ Retour
+    </button>
+
     <!-- On dit bonjour au joueur actuel -->
-    <div style="display: flex; justify-content: space-between; align-items: center;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px;">
       <h2>Zone de Jeu</h2>
       <span style="background: #e0e0e0; padding: 5px 10px; border-radius: 5px;">
         Joueur : <strong>{{ dbService.currentUser()?.pseudo }}</strong>
@@ -21,7 +26,7 @@ import { Router } from '@angular/router';
       <button (click)="onStartGame()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">
         {{ dbService.gameStatus() === 'ATTENTE' ? 'Démarrer une partie' : 'Nouveau Mot' }}
       </button>
-      <button (click)="goHistory()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">
+      <button (click)="goHistory()" style="padding: 10px 20px; font-size: 16px; cursor: pointer; background-color: #e3f2fd; border: 1px solid #90caf9; border-radius: 5px;">
         Mon Historique
       </button>
     </div>
@@ -57,10 +62,6 @@ import { Router } from '@angular/router';
 
       </div>
     }
-
-    <div style="margin-top: 20px;">
-      <button (click)="goHome()" style="padding: 5px 10px; cursor: pointer;">Retour au menu</button>
-    </div>
   `
 })
 export class GamePageComponent {

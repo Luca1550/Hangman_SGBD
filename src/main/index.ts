@@ -48,6 +48,7 @@ ipcMain.handle('db:get-random-word', async () => {
         // C. On va chercher le mot qui correspond à cet index
         const randomWord = await prisma.word.findFirst({
             skip: randomIndex,
+            include: { category: true } // On a besoin de la catégorie pour l'afficher
         });
 
         return randomWord;
@@ -143,6 +144,82 @@ ipcMain.handle('db:delete-user', async (event, userId: number) => {
     } catch (error) {
         console.error("Erreur suppression utilisateur: ", error);
         return false;
+    }
+});
+
+// --- CRUD MOTS ---
+
+ipcMain.handle('db:get-words', async () => {
+    try {
+        return await prisma.word.findMany({
+            include: { category: true, difficulty: true },
+            orderBy: { text: 'asc' }
+        });
+    } catch (e) {
+        return [];
+    }
+});
+
+ipcMain.handle('db:add-word', async (event, data) => {
+    try {
+        return await prisma.word.create({ data });
+    } catch (e) {
+        console.error(e);
+        return null;
+    }
+});
+
+ipcMain.handle('db:update-word', async (event, data) => {
+    try {
+        const { id, ...updateData } = data;
+        return await prisma.word.update({
+            where: { id },
+            data: updateData
+        });
+    } catch (e) {
+        console.error(e);
+        return null;
+    }
+});
+
+ipcMain.handle('db:delete-word', async (event, id: number) => {
+    try {
+        await prisma.word.delete({ where: { id } });
+        return true;
+    } catch (e) {
+        return false;
+    }
+});
+
+ipcMain.handle('db:get-difficulties', async () => {
+    try {
+        return await prisma.difficulty.findMany();
+    } catch (e) {
+        return [];
+    }
+});
+
+// Canal pour ajouter une nouvelle catégorie
+ipcMain.handle('db:add-category', async (event, name: string) => {
+    try {
+        return await prisma.category.create({ data: { name } });
+    } catch (e) {
+        console.error(e);
+        return null;
+    }
+});
+
+// Canal pour supprimer une catégorie
+ipcMain.handle('db:delete-category', async (event, id: number) => {
+    try {
+        await prisma.category.delete({ where: { id } });
+        return { success: true };
+    } catch (error: any) {
+        // P2003 = Foreign key constraint failed. Ça veut dire que des mots utilisent encore cette catégorie.
+        if (error.code === 'P2003') {
+            return { success: false, message: "Impossible de supprimer cette catégorie car elle contient encore des mots." };
+        }
+        return { success: false, message: "Erreur lors de la suppression de la catégorie." };
     }
 });
 
