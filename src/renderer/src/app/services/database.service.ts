@@ -10,6 +10,7 @@ declare global {
       saveGame: (data: any) => Promise<any>;
       getPlayerHistory: (userId: number) => Promise<any>;
       getUsers: () => Promise<any[]>;
+      deleteUser: (userId: number) => Promise<boolean>;
     }
   }
 }
@@ -110,6 +111,15 @@ export class DatabaseService {
     } catch (error) {
       console.error("Erreur récupération utilisateurs :", error);
       return [];
+    }
+  }
+
+  async deleteUser(userId: number) {
+    try {
+      return await window.electronAPI.deleteUser(userId);
+    } catch (error) {
+      console.error("Erreur suppression :", error);
+      return false;
     }
   }
 

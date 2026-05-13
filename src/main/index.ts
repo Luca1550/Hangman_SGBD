@@ -131,6 +131,21 @@ ipcMain.handle('db:get-users', async () => {
     }
 });
 
+// 10. Canal pour supprimer un utilisateur (Exigence CRUD: Delete)
+ipcMain.handle('db:delete-user', async (event, userId: number) => {
+    try {
+        // La suppression de l'utilisateur va automatiquement supprimer ses parties
+        // car nous avons configuré "onDelete: Cascade" dans le schema.prisma !
+        await prisma.user.delete({
+            where: { id: userId }
+        });
+        return true;
+    } catch (error) {
+        console.error("Erreur suppression utilisateur: ", error);
+        return false;
+    }
+});
+
 app.whenReady().then(() => {
     createWindow();
 

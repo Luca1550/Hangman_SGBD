@@ -6,12 +6,18 @@ import { DatabaseService } from '../services/database.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ReactiveFormsModule], // Exigence PDF : ReactiveFormsModule
+  imports: [ReactiveFormsModule],
   template: `
-    <div style="text-align: center; margin-top: 50px;">
+    <!-- Bouton Admin positionné en haut à droite -->
+    <button 
+      (click)="goAdmin()" 
+      style="position: absolute; top: 20px; right: 20px; padding: 10px 15px; font-weight: bold; cursor: pointer; background: #ddd; border: 1px solid #aaa; border-radius: 5px;">
+      Admin ⚙️
+    </button>
+
+    <div style="text-align: center; margin-top: 80px;">
       <h2>Créer un profil ou se connecter</h2>
       
-      <!-- Exigence PDF : Formulaire Réactif -->
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <input 
           type="text" 
@@ -44,7 +50,6 @@ export class HomeComponent {
   router = inject(Router);
   dbService = inject(DatabaseService);
 
-  // Création du formulaire avec validation
   loginForm = this.fb.group({
     pseudo: ['', [Validators.required, Validators.minLength(3)]]
   });
@@ -52,11 +57,9 @@ export class HomeComponent {
   async onSubmit() {
     if (this.loginForm.valid) {
       const pseudo = this.loginForm.value.pseudo!;
-      // On sauvegarde dans la DB locale via notre service
       const user = await this.dbService.login(pseudo);
       
       if (user) {
-        // Exigence PDF : Routage (Navigation vers la page de jeu)
         this.router.navigate(['/game']);
       }
     }
@@ -64,5 +67,9 @@ export class HomeComponent {
 
   viewUsers() {
     this.router.navigate(['/users']);
+  }
+
+  goAdmin() {
+    this.router.navigate(['/admin']);
   }
 }

@@ -9,5 +9,6 @@ contextBridge.exposeInMainWorld('electronAPI',{
     loginUser: (pseudo: string) => ipcRenderer.invoke('db:login-user', pseudo),
     saveGame: (data: any) => ipcRenderer.invoke('db:save-game', data),
     getPlayerHistory: (userId: number) => ipcRenderer.invoke('db:get-player-history', userId),
-    getUsers: () => ipcRenderer.invoke('db:get-users')
+    getUsers: () => ipcRenderer.invoke('db:get-users'),
+    deleteUser: (userId: number) => ipcRenderer.invoke('db:delete-user', userId)
 })
