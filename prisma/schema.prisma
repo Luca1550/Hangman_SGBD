@@ -66,7 +66,7 @@ model Game {
   user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   wordId       Int
-  word         Word       @relation(fields: [wordId], references: [id])
+  word         Word       @relation(fields: [wordId], references: [id], onDelete: Cascade)
   
   difficultyId Int
   difficulty   Difficulty @relation(fields: [difficultyId], references: [id])

@@ -34,6 +34,9 @@ async function main() {
   })
 
   // 3. Mots
+  // On supprime d'abord les anciens mots de test pour éviter les doublons si on relance le seed
+  await prisma.word.deleteMany({})
+
   await prisma.word.create({
     data: { text: 'ELEPHANT', categoryId: animals.id, difficultyId: easy.id, hint: 'Un gros animal gris' }
   })
@@ -42,9 +45,27 @@ async function main() {
     data: { text: 'BELGIQUE', categoryId: countries.id, difficultyId: easy.id, hint: 'Le pays de la frite' }
   })
 
+  await prisma.word.create({
+    data: { text: 'CROCODILE', categoryId: animals.id, difficultyId: hard.id, hint: 'Reptile avec de grandes dents' }
+  })
+
+  await prisma.word.create({
+    data: { text: 'BRESIL', categoryId: countries.id, difficultyId: easy.id, hint: 'Pays du carnaval et de la samba' }
+  })
+
+  await prisma.word.create({
+    data: { text: 'GIRAFE', categoryId: animals.id, difficultyId: easy.id, hint: 'Animal au très long cou' }
+  })
+
+  await prisma.word.create({
+    data: { text: 'JAPON', categoryId: countries.id, difficultyId: hard.id, hint: 'Le pays du soleil levant' }
+  })
+
   // 4. Succès
-  await prisma.achievement.create({
-    data: { name: 'Première Victoire', description: 'Vous avez gagné votre première partie !' }
+  await prisma.achievement.upsert({
+    where: { name: 'Première Victoire' },
+    update: {},
+    create: { name: 'Première Victoire', description: 'Vous avez gagné votre première partie !' }
   })
 
   console.log('Base de données peuplée avec succès !')
