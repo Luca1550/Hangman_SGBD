@@ -6,7 +6,11 @@ import { Router } from '@angular/router';
   selector: 'app-users-list',
   standalone: true,
   template: `
-    <div style="padding: 20px; text-align: center;">
+    <button (click)="goBack()" style="position: absolute; top: 20px; left: 20px; padding: 10px 15px; font-weight: bold; cursor: pointer; background: #ddd; border: 1px solid #aaa; border-radius: 5px;">
+      ⬅ Retour
+    </button>
+
+    <div style="padding: 20px; text-align: center; margin-top: 40px;">
       <h2>Liste des Utilisateurs Inscrits</h2>
       
       <div style="margin: 20px auto; max-width: 400px;">
@@ -20,10 +24,6 @@ import { Router } from '@angular/router';
           }
         </ul>
       </div>
-
-      <button (click)="goBack()" style="padding: 10px 20px; cursor: pointer; margin-top: 20px;">
-        Retour au Login
-      </button>
     </div>
   `
 })

@@ -12,7 +12,7 @@ import { DatabaseService } from '../services/database.service';
     <button 
       (click)="goAdmin()" 
       style="position: absolute; top: 20px; right: 20px; padding: 10px 15px; font-weight: bold; cursor: pointer; background: #ddd; border: 1px solid #aaa; border-radius: 5px;">
-      Admin ⚙️
+      Admin
     </button>
 
     <div style="text-align: center; margin-top: 80px;">
