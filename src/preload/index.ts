@@ -6,5 +6,6 @@ contextBridge.exposeInMainWorld('electronAPI',{
     // Elle envoie un message nommé 'db:get-categories' au processus principal (Main)
     getCategories: () => ipcRenderer.invoke('db:get-categories'),
     getRandomWord: () => ipcRenderer.invoke('db:get-random-word'),
-    loginUser: (pseudo: string) => ipcRenderer.invoke('db:login-user', pseudo)
+    loginUser: (pseudo: string) => ipcRenderer.invoke('db:login-user', pseudo),
+    saveGame: (data: any) => ipcRenderer.invoke('db:save-game', data)
 })

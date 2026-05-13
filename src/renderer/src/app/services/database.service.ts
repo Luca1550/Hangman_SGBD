@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, effect } from '@angular/core';
 
 // 1. On explique à TypeScript que notre Preload a ajouté "electronAPI" à l'objet window
 declare global {
@@ -7,6 +7,7 @@ declare global {
       getCategories: () => Promise<any[]>;
       getRandomWord: () => Promise<any>;
       loginUser: (pseudo: string) => Promise<any>;
+      saveGame: (data: any) => Promise<any>;
     }
   }
 }
@@ -34,7 +35,51 @@ export class DatabaseService {
     return guesses.filter(letter => !word.text.includes(letter)).length;
   });
 
-  constructor() { }
+  // Nouveau statut calculé dynamiquement !
+  gameStatus = computed(() => {
+    const word = this.currentWord();
+    if (!word) return 'ATTENTE';
+
+    const errors = this.errorCount();
+    if (errors >= 7) return 'PERDU'; // 7 erreurs maximum
+
+    const guesses = this.guessedLetters();
+    // Le jeu est gagné si toutes les lettres du mot ont été cliquées
+    const isWon = word.text.split('').every((letter: string) => guesses.includes(letter));
+    
+    if (isWon) return 'GAGNE';
+    return 'EN_COURS';
+  });
+
+  constructor() {
+    // EXIGENCE PDF BONUS : effect()
+    // Ce code s'exécute silencieusement en arrière-plan à chaque fois que le Signal "gameStatus" change
+    effect(() => {
+      const status = this.gameStatus();
+      if (status === 'GAGNE' || status === 'PERDU') {
+        this.saveCurrentGame(status);
+      }
+    });
+  }
+
+  async saveCurrentGame(status: string) {
+    const user = this.currentUser();
+    const word = this.currentWord();
+    if (!user || !word) return;
+
+    // Calcul du score simple : 100 points - 10 points par erreur si gagné.
+    const score = status === 'GAGNE' ? 100 - (this.errorCount() * 10) : 0;
+
+    await window.electronAPI.saveGame({
+      userId: user.id,
+      wordId: word.id,
+      difficultyId: word.difficultyId,
+      errors_count: this.errorCount(),
+      status: status,
+      score: score
+    });
+    console.log("Partie sauvegardée dans la DB ! Status:", status);
+  }
 
   // 5. Les fonctions qui appellent le backend
   async login(pseudo: string) {

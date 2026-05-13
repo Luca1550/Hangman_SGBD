@@ -76,6 +76,25 @@ ipcMain.handle('db:login-user', async (event, pseudo: string) => {
     }
 });
 
+// 7. Canal pour sauvegarder une partie (Victoire ou Défaite)
+ipcMain.handle('db:save-game', async (event, data: any) => {
+    try {
+        return await prisma.game.create({
+            data: {
+                userId: data.userId,
+                wordId: data.wordId,
+                difficultyId: data.difficultyId,
+                errors_count: data.errors_count,
+                status: data.status,
+                score: data.score
+            }
+        });
+    } catch (error) {
+        console.error("Erreur sauvegarde partie: ", error);
+        return null;
+    }
+});
+
 app.whenReady().then(() => {
     createWindow();
 

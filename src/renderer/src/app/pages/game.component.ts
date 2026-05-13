@@ -18,13 +18,13 @@ import { Router } from '@angular/router';
     </div>
 
     <button (click)="onStartGame()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">
-      Tirer un mot au hasard
+      {{ dbService.gameStatus() === 'ATTENTE' ? 'Démarrer une partie' : 'Nouveau Mot' }}
     </button>
 
     @if (dbService.currentWord()) {
       <div style="margin-top: 20px; padding: 20px; background-color: #f0f0f0; border-radius: 8px;">
         
-        <h3 style="color: darkred;">Erreurs : {{ dbService.errorCount() }}</h3>
+        <h3 style="color: darkred;">Erreurs : {{ dbService.errorCount() }} / 7</h3>
 
         <app-game-board 
           [word]="dbService.currentWord()" 
@@ -33,10 +33,22 @@ import { Router } from '@angular/router';
 
         <hr style="margin: 20px 0;">
 
-        <app-keyboard 
-          [disabledLetters]="dbService.guessedLetters()"
-          (letterPlayed)="onPlayLetter($event)">
-        </app-keyboard>
+        @if (dbService.gameStatus() === 'EN_COURS') {
+          <app-keyboard 
+            [disabledLetters]="dbService.guessedLetters()"
+            (letterPlayed)="onPlayLetter($event)">
+          </app-keyboard>
+        } @else if (dbService.gameStatus() === 'GAGNE') {
+          <div style="text-align: center; color: green;">
+            <h2>🎉 FÉLICITATIONS ! 🎉</h2>
+            <p>Vous avez deviné le mot !</p>
+          </div>
+        } @else if (dbService.gameStatus() === 'PERDU') {
+          <div style="text-align: center; color: red;">
+            <h2>💀 PERDU ! 💀</h2>
+            <p>Le mot était : <strong>{{ dbService.currentWord()?.text }}</strong></p>
+          </div>
+        }
 
       </div>
     }
@@ -59,6 +71,10 @@ export class GamePageComponent {
   }
 
   goHome() {
+    // On nettoie la session de jeu avant de partir
+    this.dbService.currentWord.set(null);
+    this.dbService.guessedLetters.set([]);
+    this.dbService.currentUser.set(null);
     this.router.navigate(['/']);
   }
 }
