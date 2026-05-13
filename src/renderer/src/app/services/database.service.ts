@@ -6,6 +6,7 @@ declare global {
     electronAPI: {
       getCategories: () => Promise<any[]>;
       getRandomWord: () => Promise<any>;
+      loginUser: (pseudo: string) => Promise<any>;
     }
   }
 }
@@ -20,6 +21,7 @@ export class DatabaseService {
   categories = signal<any[]>([]);
   currentWord = signal<any | null>(null); // Pour stocker le mot de la partie en cours
   guessedLetters = signal<string[]>([]); // Mémoire des lettres jouées
+  currentUser = signal<any | null>(null); // Pour savoir qui joue
 
   // 4. EXIGENCE PDF : computed()
   // Recalcule le nombre d'erreurs automatiquement si le mot ou les lettres jouées changent
@@ -35,6 +37,17 @@ export class DatabaseService {
   constructor() { }
 
   // 5. Les fonctions qui appellent le backend
+  async login(pseudo: string) {
+    try {
+      const user = await window.electronAPI.loginUser(pseudo);
+      this.currentUser.set(user);
+      return user; // On renvoie l'utilisateur pour que la page sache que c'est bon
+    } catch (error) {
+      console.error("Erreur login :", error);
+      return null;
+    }
+  }
+
   async loadCategories() {
     try {
       // vers le preload

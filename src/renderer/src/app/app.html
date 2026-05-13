@@ -1,47 +1,11 @@
-<main style="padding: 20px; font-family: sans-serif;">
-  <h1>Bienvenue dans le Jeu du Pendu !</h1>
+<main style="padding: 20px; font-family: sans-serif; max-width: 800px; margin: 0 auto;">
+  <h1 style="text-align: center; border-bottom: 2px solid #ccc; padding-bottom: 10px;">
+    Jeu du Pendu SGBD
+  </h1>
 
-  <h2>Liste des catégories disponibles :</h2>
-  <ul>
-    @for (category of dbService.categories(); track category.id) {
-      <li>
-        <strong>{{ category.name }}</strong> : {{ category.description }}
-      </li>
-    } @empty {
-      <li>Chargement des catégories...</li>
-    }
-  </ul>
-
-  <hr style="margin: 20px 0;">
-
-  <h2>Zone de Jeu</h2>
-  <button (click)="onStartGame()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">
-    Tirer un mot au hasard
-  </button>
-
-  <!-- Si un mot a été tiré au sort, on l'affiche -->
-  @if (dbService.currentWord()) {
-    <div style="margin-top: 20px; padding: 20px; background-color: #f0f0f0; border-radius: 8px;">
-      
-      <!-- Affichage du nombre d'erreurs (via le computed) -->
-      <h3 style="color: darkred;">Erreurs : {{ dbService.errorCount() }}</h3>
-
-      <!-- Notre nouveau composant Game Board -->
-      <app-game-board 
-        [word]="dbService.currentWord()" 
-        [guessedLetters]="dbService.guessedLetters()">
-      </app-game-board>
-
-      <hr style="margin: 20px 0;">
-
-      <!-- Notre nouveau composant Keyboard -->
-      <app-keyboard 
-        [disabledLetters]="dbService.guessedLetters()"
-        (letterPlayed)="onPlayLetter($event)">
-      </app-keyboard>
-
-    </div>
-  }
+  <!-- 
+    C'est ICI que le Routeur va injecter la bonne page : 
+    Soit HomeComponent (l'accueil), soit GamePageComponent (le jeu) 
+  -->
+  <router-outlet></router-outlet>
 </main>
-
-<router-outlet></router-outlet>

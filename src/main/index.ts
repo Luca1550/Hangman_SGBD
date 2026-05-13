@@ -57,6 +57,25 @@ ipcMain.handle('db:get-random-word', async () => {
     }
 });
 
+// 6. Canal pour gérer la connexion / création d'un joueur
+ipcMain.handle('db:login-user', async (event, pseudo: string) => {
+    try {
+        // On utilise upsert : s'il existe on le met à jour, sinon on le crée
+        const user = await prisma.user.upsert({
+            where: { email: `${pseudo.toLowerCase()}@local.game` }, // email bidon technique
+            update: {}, 
+            create: { 
+                pseudo: pseudo, 
+                email: `${pseudo.toLowerCase()}@local.game` 
+            },
+        });
+        return user;
+    } catch (error) {
+        console.error("Erreur login joueur: ", error);
+        return null;
+    }
+});
+
 app.whenReady().then(() => {
     createWindow();
 
