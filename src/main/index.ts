@@ -118,6 +118,19 @@ ipcMain.handle('db:get-player-history', async (event, userId: number) => {
     }
 });
 
+// 9. Canal pour récupérer la liste de tous les utilisateurs
+ipcMain.handle('db:get-users', async () => {
+    try {
+        const users = await prisma.user.findMany({
+            orderBy: { createdAt: 'desc' }
+        });
+        return users;
+    } catch (error) {
+        console.error("Erreur récupération utilisateurs: ", error);
+        return [];
+    }
+});
+
 app.whenReady().then(() => {
     createWindow();
 

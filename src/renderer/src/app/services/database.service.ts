@@ -9,6 +9,7 @@ declare global {
       loginUser: (pseudo: string) => Promise<any>;
       saveGame: (data: any) => Promise<any>;
       getPlayerHistory: (userId: number) => Promise<any>;
+      getUsers: () => Promise<any[]>;
     }
   }
 }
@@ -100,6 +101,15 @@ export class DatabaseService {
     } catch (error) {
       console.error("Erreur historique :", error);
       return null;
+    }
+  }
+
+  async getAllUsers() {
+    try {
+      return await window.electronAPI.getUsers();
+    } catch (error) {
+      console.error("Erreur récupération utilisateurs :", error);
+      return [];
     }
   }
 

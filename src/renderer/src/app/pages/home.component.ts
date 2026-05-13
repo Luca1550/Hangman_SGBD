@@ -30,6 +30,12 @@ import { DatabaseService } from '../services/database.service';
       @if (loginForm.get('pseudo')?.invalid && loginForm.get('pseudo')?.touched) {
         <p style="color: red;">Le pseudo est obligatoire (min 3 lettres).</p>
       }
+
+      <hr style="margin: 30px auto; max-width: 300px;">
+      
+      <button (click)="viewUsers()" style="padding: 10px 20px; font-size: 14px; cursor: pointer; background-color: #f0f0f0; border: 1px solid #ccc;">
+        Voir la liste des utilisateurs
+      </button>
     </div>
   `
 })
@@ -54,5 +60,9 @@ export class HomeComponent {
         this.router.navigate(['/game']);
       }
     }
+  }
+
+  viewUsers() {
+    this.router.navigate(['/users']);
   }
 }
