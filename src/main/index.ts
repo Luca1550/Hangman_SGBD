@@ -95,6 +95,29 @@ ipcMain.handle('db:save-game', async (event, data: any) => {
     }
 });
 
+// 8. Canal pour récupérer l'historique d'un joueur (Exigence: JOIN / include)
+ipcMain.handle('db:get-player-history', async (event, userId: number) => {
+    try {
+        const history = await prisma.user.findUnique({
+            where: { id: userId },
+            include: {
+                games: {
+                    include: {
+                        word: true // On "JOIN" la table mot pour savoir quel mot a été joué
+                    },
+                    orderBy: {
+                        playedAt: 'desc' // Les plus récentes en premier
+                    }
+                }
+            }
+        });
+        return history;
+    } catch (error) {
+        console.error("Erreur récupération historique: ", error);
+        return null;
+    }
+});
+
 app.whenReady().then(() => {
     createWindow();
 

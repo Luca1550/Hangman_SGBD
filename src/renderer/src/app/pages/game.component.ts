@@ -17,9 +17,14 @@ import { Router } from '@angular/router';
       </span>
     </div>
 
-    <button (click)="onStartGame()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">
-      {{ dbService.gameStatus() === 'ATTENTE' ? 'Démarrer une partie' : 'Nouveau Mot' }}
-    </button>
+    <div style="margin-bottom: 20px; display: flex; gap: 10px;">
+      <button (click)="onStartGame()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">
+        {{ dbService.gameStatus() === 'ATTENTE' ? 'Démarrer une partie' : 'Nouveau Mot' }}
+      </button>
+      <button (click)="goHistory()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">
+        Mon Historique
+      </button>
+    </div>
 
     @if (dbService.currentWord()) {
       <div style="margin-top: 20px; padding: 20px; background-color: #f0f0f0; border-radius: 8px;">
@@ -76,5 +81,9 @@ export class GamePageComponent {
     this.dbService.guessedLetters.set([]);
     this.dbService.currentUser.set(null);
     this.router.navigate(['/']);
+  }
+
+  goHistory() {
+    this.router.navigate(['/history']);
   }
 }

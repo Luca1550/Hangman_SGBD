@@ -8,6 +8,7 @@ declare global {
       getRandomWord: () => Promise<any>;
       loginUser: (pseudo: string) => Promise<any>;
       saveGame: (data: any) => Promise<any>;
+      getPlayerHistory: (userId: number) => Promise<any>;
     }
   }
 }
@@ -89,6 +90,15 @@ export class DatabaseService {
       return user; // On renvoie l'utilisateur pour que la page sache que c'est bon
     } catch (error) {
       console.error("Erreur login :", error);
+      return null;
+    }
+  }
+
+  async getHistory(userId: number) {
+    try {
+      return await window.electronAPI.getPlayerHistory(userId);
+    } catch (error) {
+      console.error("Erreur historique :", error);
       return null;
     }
   }
