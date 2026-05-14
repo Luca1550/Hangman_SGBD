@@ -14,7 +14,7 @@ import { Category, Word, Difficulty } from '../models/types';
     </button>
 
     <div style="padding: 20px; max-width: 800px; margin: 40px auto 0;">
-      <h2 style="color: darkred; text-align: center;">Gestion des Mots (CRUD)</h2>
+      <h2 style="color: darkred; text-align: center;">Gestion des Mots</h2>
       
       <!-- Formulaire d'ajout / modification -->
       <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
