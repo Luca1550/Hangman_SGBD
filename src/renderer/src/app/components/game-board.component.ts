@@ -1,4 +1,4 @@
-import { Component, input, signal } from '@angular/core';
+import { Component, input, signal, effect } from '@angular/core';
 
 @Component({
   selector: 'app-game-board',
@@ -42,4 +42,12 @@ export class GameBoardComponent {
   guessedLetters = input.required<string[]>();
 
   isHintRevealed = signal(false);
+
+  constructor() {
+    // Dès que le mot (input) change, on remet le signal isHintRevealed à false
+    effect(() => {
+      this.word(); // On observe le mot
+      this.isHintRevealed.set(false);
+    }, { allowSignalWrites: true });
+  }
 }

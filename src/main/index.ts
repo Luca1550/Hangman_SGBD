@@ -77,10 +77,10 @@ ipcMain.handle('db:login-user', async (event, pseudo: string) => {
     }
 });
 
-// 7. Canal pour sauvegarder une partie (Victoire ou Défaite)
+// 7. Canal pour sauvegarder une partie et gérer les succès
 ipcMain.handle('db:save-game', async (event, data: any) => {
     try {
-        return await prisma.game.create({
+        const game = await prisma.game.create({
             data: {
                 userId: data.userId,
                 wordId: data.wordId,
@@ -90,6 +90,64 @@ ipcMain.handle('db:save-game', async (event, data: any) => {
                 score: data.score
             }
         });
+
+        // --- GESTION DES SUCCÈS ---
+        const user = await prisma.user.findUnique({
+            where: { id: data.userId },
+            include: { 
+                games: true, 
+                achievements: { include: { achievement: true } } 
+            }
+        });
+
+        const newUnlockedAchievements = [];
+
+        if (user) {
+            const allAchievements = await prisma.achievement.findMany();
+            const earnedAchievementNames = user.achievements.map(ua => ua.achievement.name);
+            const newUnlocks = [];
+
+            // Helper function to check and grant
+            const checkAndGrant = (name: string, condition: boolean) => {
+                if (condition && !earnedAchievementNames.includes(name)) {
+                    const ach = allAchievements.find(a => a.name === name);
+                    if (ach) newUnlocks.push(ach);
+                }
+            };
+
+            // Règle 1: Première partie
+            checkAndGrant('Première partie', user.games.length >= 1);
+
+            // Règle 2: 5 victoires
+            const wins = user.games.filter(g => g.status === 'GAGNE').length;
+            checkAndGrant('5 victoires', wins >= 5);
+
+            // Règle 3: Zéro pointé
+            checkAndGrant('Zéro pointé', data.status === 'PERDU');
+
+            // Règle 4: Partie parfaite
+            checkAndGrant('Partie parfaite', data.status === 'GAGNE' && data.errors_count === 0);
+
+            // Règle 5: Complétionniste (S'ils ont obtenu les 4 autres)
+            const totalEarnedAndNew = earnedAchievementNames.length + newUnlocks.length;
+            if (totalEarnedAndNew === allAchievements.length - 1 && !earnedAchievementNames.includes('Complétionniste')) {
+                const ach = allAchievements.find(a => a.name === 'Complétionniste');
+                if (ach) newUnlocks.push(ach);
+            }
+
+            // On insère les nouveaux succès
+            for (const ach of newUnlocks) {
+                await prisma.userAchievement.create({
+                    data: {
+                        userId: user.id,
+                        achievementId: ach.id
+                    }
+                });
+                newUnlockedAchievements.push(ach);
+            }
+        }
+
+        return { game, newAchievements: newUnlockedAchievements };
     } catch (error) {
         console.error("Erreur sauvegarde partie: ", error);
         return null;
@@ -128,6 +186,25 @@ ipcMain.handle('db:get-users', async () => {
         return users;
     } catch (error) {
         console.error("Erreur récupération utilisateurs: ", error);
+        return [];
+    }
+});
+
+// Canal pour récupérer les succès d'un joueur
+ipcMain.handle('db:get-user-achievements', async (event, userId: number) => {
+    try {
+        const userWithAch = await prisma.user.findUnique({
+            where: { id: userId },
+            include: {
+                achievements: {
+                    include: { achievement: true },
+                    orderBy: { earnedAt: 'desc' }
+                }
+            }
+        });
+        return userWithAch ? userWithAch.achievements : [];
+    } catch (error) {
+        console.error("Erreur récupération succès: ", error);
         return [];
     }
 });

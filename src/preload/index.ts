@@ -10,6 +10,7 @@ contextBridge.exposeInMainWorld('electronAPI',{
     saveGame: (data: any) => ipcRenderer.invoke('db:save-game', data),
     getPlayerHistory: (userId: number) => ipcRenderer.invoke('db:get-player-history', userId),
     getUsers: () => ipcRenderer.invoke('db:get-users'),
+    getUserAchievements: (userId: number) => ipcRenderer.invoke('db:get-user-achievements', userId),
     deleteUser: (userId: number) => ipcRenderer.invoke('db:delete-user', userId),
     
     // CRUD Mots

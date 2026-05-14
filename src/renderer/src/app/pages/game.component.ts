@@ -60,6 +60,24 @@ import { Router } from '@angular/router';
           </div>
         }
 
+        <!-- Affichage des nouveaux succès débloqués ! -->
+        @if (dbService.newAchievements().length > 0) {
+          <div style="margin-top: 20px; padding: 15px; border: 2px solid gold; border-radius: 8px; background-color: #fff9c4;">
+            <h3 style="color: #f57f17; text-align: center; margin-top: 0;">🏆 Nouveaux succès débloqués ! 🏆</h3>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              @for (ach of dbService.newAchievements(); track ach.id) {
+                <div style="display: flex; align-items: center; background: white; padding: 10px; border-radius: 5px;">
+                  <span style="font-size: 30px; margin-right: 15px;">{{ ach.icon_name }}</span>
+                  <div>
+                    <strong style="display: block;">{{ ach.name }}</strong>
+                    <span style="font-size: 12px; color: gray;">{{ ach.description }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
       </div>
     }
   `
@@ -81,6 +99,7 @@ export class GamePageComponent {
     this.dbService.currentWord.set(null);
     this.dbService.guessedLetters.set([]);
     this.dbService.currentUser.set(null);
+    this.dbService.newAchievements.set([]);
     this.router.navigate(['/']);
   }
 

@@ -62,11 +62,21 @@ async function main() {
   })
 
   // 4. Succès
-  await prisma.achievement.upsert({
-    where: { name: 'Première Victoire' },
-    update: {},
-    create: { name: 'Première Victoire', description: 'Vous avez gagné votre première partie !' }
-  })
+  const achievements = [
+    { name: 'Première partie', description: 'Vous avez joué votre première partie.', icon_name: '🥉' },
+    { name: '5 victoires', description: 'Vous avez remporté 5 parties.', icon_name: '⭐' },
+    { name: 'Zéro pointé', description: 'Vous avez perdu une partie avec un score de 0.', icon_name: '💀' },
+    { name: 'Partie parfaite', description: 'Vous avez gagné sans faire aucune erreur.', icon_name: '✨' },
+    { name: 'Complétionniste', description: 'Vous avez débloqué tous les autres succès.', icon_name: '🏆' }
+  ];
+
+  for (const ach of achievements) {
+    await prisma.achievement.upsert({
+      where: { name: ach.name },
+      update: { description: ach.description, icon_name: ach.icon_name },
+      create: ach
+    });
+  }
 
   console.log('Base de données peuplée avec succès !')
 }

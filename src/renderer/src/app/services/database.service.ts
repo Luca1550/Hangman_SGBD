@@ -10,6 +10,7 @@ declare global {
       saveGame: (data: any) => Promise<any>;
       getPlayerHistory: (userId: number) => Promise<any>;
       getUsers: () => Promise<any[]>;
+      getUserAchievements: (userId: number) => Promise<any[]>;
       deleteUser: (userId: number) => Promise<boolean>;
       getWords: () => Promise<any[]>;
       addWord: (data: any) => Promise<any>;
@@ -33,6 +34,7 @@ export class DatabaseService {
   currentWord = signal<any | null>(null); // Pour stocker le mot de la partie en cours
   guessedLetters = signal<string[]>([]); // Mémoire des lettres jouées
   currentUser = signal<any | null>(null); // Pour savoir qui joue
+  newAchievements = signal<any[]>([]); // Pour afficher les notifications de succès
 
   // 4. EXIGENCE PDF : computed()
   // Recalcule le nombre d'erreurs automatiquement si le mot ou les lettres jouées changent
@@ -80,7 +82,7 @@ export class DatabaseService {
     // Calcul du score simple : 100 points - 10 points par erreur si gagné.
     const score = status === 'GAGNE' ? 100 - (this.errorCount() * 10) : 0;
 
-    await window.electronAPI.saveGame({
+    const result = await window.electronAPI.saveGame({
       userId: user.id,
       wordId: word.id,
       difficultyId: word.difficultyId,
@@ -88,6 +90,11 @@ export class DatabaseService {
       status: status,
       score: score
     });
+
+    if (result && result.newAchievements && result.newAchievements.length > 0) {
+      this.newAchievements.set(result.newAchievements);
+    }
+    
     console.log("Partie sauvegardée dans la DB ! Status:", status);
   }
 
@@ -117,6 +124,15 @@ export class DatabaseService {
       return await window.electronAPI.getUsers();
     } catch (error) {
       console.error("Erreur récupération utilisateurs :", error);
+      return [];
+    }
+  }
+
+  async getUserAchievements(userId: number) {
+    try {
+      return await window.electronAPI.getUserAchievements(userId);
+    } catch (error) {
+      console.error("Erreur récupération succès :", error);
       return [];
     }
   }
@@ -176,6 +192,7 @@ export class DatabaseService {
       const word = await window.electronAPI.getRandomWord();
       this.currentWord.set(word);
       this.guessedLetters.set([]); // Réinitialiser les lettres pour la nouvelle partie
+      this.newAchievements.set([]); // Réinitialiser les nouveaux succès
       console.log("Nouveau mot tiré au sort :", word);
     } catch (error) {
       console.error("Erreur tirage mot :", error);
