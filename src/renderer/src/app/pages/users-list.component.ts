@@ -1,6 +1,7 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { DatabaseService } from '../services/database.service';
 import { Router } from '@angular/router';
+import { User } from '../models/types';
 
 @Component({
   selector: 'app-users-list',

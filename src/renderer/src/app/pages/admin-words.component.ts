@@ -2,6 +2,7 @@ import { Component, OnInit, signal, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { DatabaseService } from '../services/database.service';
 import { Router } from '@angular/router';
+import { Category, Word, Difficulty } from '../models/types';
 
 @Component({
   selector: 'app-admin-words',

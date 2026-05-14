@@ -2,6 +2,7 @@ import { Component, OnInit, signal, inject } from '@angular/core';
 import { DatabaseService } from '../services/database.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { UserAchievement } from '../models/types';
 
 @Component({
   selector: 'app-user-achievements',
@@ -39,7 +40,7 @@ export class UserAchievementsComponent implements OnInit {
   router = inject(Router);
   route = inject(ActivatedRoute);
 
-  achievements = signal<any[]>([]);
+  achievements = signal<UserAchievement[]>([]);
 
   async ngOnInit() {
     // On récupère l'ID passé en paramètre de l'URL

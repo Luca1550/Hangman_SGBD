@@ -1,23 +1,24 @@
 import { Injectable, signal, computed, effect } from '@angular/core';
+import { Category, Word, User, Difficulty, UserHistory, UserAchievement, Achievement } from '../models/types';
 
 // 1. On explique à TypeScript que notre Preload a ajouté "electronAPI" à l'objet window
 declare global {
   interface Window {
     electronAPI: {
-      getCategories: () => Promise<any[]>;
-      getRandomWord: () => Promise<any>;
-      loginUser: (pseudo: string) => Promise<any>;
+      getCategories: () => Promise<Category[]>;
+      getRandomWord: () => Promise<Word>;
+      loginUser: (pseudo: string) => Promise<User>;
       saveGame: (data: any) => Promise<any>;
-      getPlayerHistory: (userId: number) => Promise<any>;
-      getUsers: () => Promise<any[]>;
-      getUserAchievements: (userId: number) => Promise<any[]>;
+      getPlayerHistory: (userId: number) => Promise<UserHistory>;
+      getUsers: () => Promise<User[]>;
+      getUserAchievements: (userId: number) => Promise<UserAchievement[]>;
       deleteUser: (userId: number) => Promise<boolean>;
-      getWords: () => Promise<any[]>;
-      addWord: (data: any) => Promise<any>;
-      updateWord: (data: any) => Promise<any>;
+      getWords: () => Promise<Word[]>;
+      addWord: (data: any) => Promise<Word>;
+      updateWord: (data: any) => Promise<Word>;
       deleteWord: (id: number) => Promise<boolean>;
-      getDifficulties: () => Promise<any[]>;
-      addCategory: (name: string) => Promise<any>;
+      getDifficulties: () => Promise<Difficulty[]>;
+      addCategory: (name: string) => Promise<Category>;
       deleteCategory: (id: number) => Promise<{success: boolean, message?: string}>;
     }
   }
@@ -29,12 +30,12 @@ declare global {
 })
 export class DatabaseService {
   
-  // 3. On utilise des Signals pour stocker nos données
-  categories = signal<any[]>([]);
-  currentWord = signal<any | null>(null); // Pour stocker le mot de la partie en cours
+  // 3. On utilise des Signals pour stocker nos données typées
+  categories = signal<Category[]>([]);
+  currentWord = signal<Word | null>(null); // Pour stocker le mot de la partie en cours
   guessedLetters = signal<string[]>([]); // Mémoire des lettres jouées
-  currentUser = signal<any | null>(null); // Pour savoir qui joue
-  newAchievements = signal<any[]>([]); // Pour afficher les notifications de succès
+  currentUser = signal<User | null>(null); // Pour savoir qui joue
+  newAchievements = signal<Achievement[]>([]); // Pour afficher les notifications de succès
 
   // 4. EXIGENCE PDF : computed()
   // Recalcule le nombre d'erreurs automatiquement si le mot ou les lettres jouées changent
