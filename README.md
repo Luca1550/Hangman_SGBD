@@ -1,6 +1,6 @@
 # Jeu du Pendu SGBD - Projet Évaluation
 
-Ce projet est une application de bureau complète (Jeu du Pendu) développée pour évaluer les compétences en architecture logicielle, développement front-end et modélisation de base de données relationnelle.
+Ce projet est une application de bureau complète (Jeu du Pendu)
 
 ## 🛠️ Stack Technique
 *   **Framework Principal :** Electron (Desktop App)
