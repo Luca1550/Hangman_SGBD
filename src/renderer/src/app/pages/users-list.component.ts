@@ -1,15 +1,17 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { DatabaseService } from '../services/database.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { User } from '../models/types';
 
 @Component({
   selector: 'app-users-list',
   standalone: true,
+  imports: [RouterLink], // Exigence PDF : RouterLink
   template: `
-    <button (click)="goBack()" style="position: absolute; top: 20px; left: 20px; padding: 10px 15px; font-weight: bold; cursor: pointer; background: #ddd; border: 1px solid #aaa; border-radius: 5px;">
+    <!-- Exigence PDF : Navigation via liens -->
+    <a routerLink="/" style="position: absolute; top: 20px; left: 20px; padding: 10px 15px; font-weight: bold; cursor: pointer; background: #ddd; border: 1px solid #aaa; border-radius: 5px; text-decoration: none; color: black;">
       ⬅ Retour
-    </button>
+    </a>
 
     <div style="padding: 20px; text-align: center; margin-top: 40px;">
       <h2>Liste des Utilisateurs Inscrits</h2>
