@@ -1,13 +1,3 @@
-import { Component, OnInit, signal, inject } from '@angular/core';
-import { DatabaseService } from '../services/database.service';
-import { Router, RouterLink } from '@angular/router';
-import { User } from '../models/types';
-
-@Component({
-  selector: 'app-users-list',
-  standalone: true,
-  imports: [RouterLink], // Exigence PDF : RouterLink
-  template: `
     <!-- Exigence PDF : Navigation via liens -->
     <a routerLink="/" style="position: absolute; top: 20px; left: 20px; padding: 10px 15px; font-weight: bold; cursor: pointer; background: #ddd; border: 1px solid #aaa; border-radius: 5px; text-decoration: none; color: black;">
       ⬅ Retour
@@ -33,24 +23,3 @@ import { User } from '../models/types';
         </ul>
       </div>
     </div>
-  `
-})
-export class UsersListComponent implements OnInit {
-  dbService = inject(DatabaseService);
-  router = inject(Router);
-  
-  users = signal<any[]>([]);
-
-  async ngOnInit() {
-    const data = await this.dbService.getAllUsers();
-    this.users.set(data);
-  }
-
-  viewAchievements(userId: number) {
-    this.router.navigate(['/users', userId, 'achievements']);
-  }
-
-  goBack() {
-    this.router.navigate(['/']);
-  }
-}

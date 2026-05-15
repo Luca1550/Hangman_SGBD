@@ -1,10 +1,3 @@
-import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
-
-@Component({
-  selector: 'app-admin',
-  standalone: true,
-  template: `
     <button (click)="goHome()" style="position: absolute; top: 20px; left: 20px; padding: 10px 15px; font-weight: bold; cursor: pointer; background: #ddd; border: 1px solid #aaa; border-radius: 5px;">
       ⬅ Retour
     </button>
@@ -28,20 +21,3 @@ import { Router } from '@angular/router';
 
       </div>
     </div>
-  `
-})
-export class AdminComponent {
-  router = inject(Router);
-
-  goManageUsers() {
-    this.router.navigate(['/admin/users']);
-  }
-
-  goManageWords() {
-    this.router.navigate(['/admin/words']);
-  }
-
-  goHome() {
-    this.router.navigate(['/']);
-  }
-}

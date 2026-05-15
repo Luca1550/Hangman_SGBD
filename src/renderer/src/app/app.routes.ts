@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './pages/home.component';
-import { GamePageComponent } from './pages/game.component';
-import { HistoryComponent } from './pages/history.component';
-import { UsersListComponent } from './pages/users-list.component';
-import { AdminComponent } from './pages/admin.component';
-import { AdminUsersComponent } from './pages/admin-users.component';
-import { AdminWordsComponent } from './pages/admin-words.component';
-import { UserAchievementsComponent } from './pages/user-achievements.component';
+import { HomeComponent } from './pages/home/home.component';
+import { GamePageComponent } from './pages/game/game.component';
+import { HistoryComponent } from './pages/history/history.component';
+import { UsersListComponent } from './pages/users-list/users-list.component';
+import { AdminComponent } from './pages/admin/admin.component';
+import { AdminUsersComponent } from './pages/admin-users/admin-users.component';
+import { AdminWordsComponent } from './pages/admin-words/admin-words.component';
+import { UserAchievementsComponent } from './pages/user-achievements/user-achievements.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent }, // Page par défaut
