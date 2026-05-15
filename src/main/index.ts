@@ -48,7 +48,7 @@ ipcMain.handle('db:get-random-word', async () => {
         // C. On va chercher le mot qui correspond à cet index
         const randomWord = await prisma.word.findFirst({
             skip: randomIndex,
-            include: { category: true } // On a besoin de la catégorie pour l'afficher
+            include: { category: true, difficulty: true } // On a besoin de la catégorie et la difficulté pour l'afficher et gérer les règles
         });
 
         return randomWord;

@@ -54,7 +54,7 @@ export class DatabaseService {
     if (!word) return 'ATTENTE';
 
     const errors = this.errorCount();
-    if (errors >= 7) return 'PERDU'; // 7 erreurs maximum
+    if (errors >= word.difficulty!.max_errors) return 'PERDU'; // Utilisation dynamique de la difficulté
 
     const guesses = this.guessedLetters();
     // Le jeu est gagné si toutes les lettres du mot ont été cliquées
@@ -80,8 +80,9 @@ export class DatabaseService {
     const word = this.currentWord();
     if (!user || !word) return;
 
-    // Calcul du score simple : 100 points - 10 points par erreur si gagné.
-    const score = status === 'GAGNE' ? 100 - (this.errorCount() * 10) : 0;
+    // Calcul du score avec le multiplicateur de difficulté de la base de données
+    const baseScore = status === 'GAGNE' ? 100 - (this.errorCount() * 10) : 0;
+    const finalScore = Math.round(baseScore * word.difficulty!.score_multiplier);
 
     const result = await window.electronAPI.saveGame({
       userId: user.id,
@@ -89,7 +90,7 @@ export class DatabaseService {
       difficultyId: word.difficultyId,
       errors_count: this.errorCount(),
       status: status,
-      score: score
+      score: finalScore
     });
 
     if (result && result.newAchievements && result.newAchievements.length > 0) {

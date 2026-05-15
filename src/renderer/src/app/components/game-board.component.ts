@@ -7,9 +7,14 @@ import { Word } from '../models/types';
   template: `
     <div style="display: flex; justify-content: space-between; align-items: baseline;">
       <h3>Mot à deviner :</h3>
-      <span style="background-color: #ffe0b2; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 14px; color: #0d47a1;">
-        Catégorie : {{ word().category?.name || 'Inconnue' }}
-      </span>
+      <div>
+        <span style="background-color: #ffe0b2; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 14px; color: #0d47a1;">
+          Catégorie : {{ word().category?.name || 'Inconnue' }}
+        </span>
+        <span style="background-color: #ffcdd2; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 14px; color: #b71c1c; margin-left: 10px;">
+          Difficulté : {{ word().difficulty?.level_name || 'Inconnue' }}
+        </span>
+      </div>
     </div>
 
     <p style="font-size: 32px; letter-spacing: 5px; font-family: monospace;">

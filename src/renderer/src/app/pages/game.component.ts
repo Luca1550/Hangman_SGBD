@@ -34,7 +34,7 @@ import { Router } from '@angular/router';
     @if (dbService.currentWord()) {
       <div style="margin-top: 20px; padding: 20px; background-color: #f0f0f0; border-radius: 8px;">
         
-        <h3 style="color: darkred;">Erreurs : {{ dbService.errorCount() }} / 7</h3>
+        <h3 style="color: darkred;">Erreurs : {{ dbService.errorCount() }} / {{ dbService.currentWord()?.difficulty?.max_errors }}</h3>
 
         <app-game-board 
           [word]="dbService.currentWord()" 
