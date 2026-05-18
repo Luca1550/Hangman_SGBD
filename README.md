@@ -38,6 +38,7 @@ npx @electron/rebuild -f -w better-sqlite3
 ### 3. Initialisation de la Base de Données (Prisma)
 Générez le client TypeScript et créez la base de données locale avec ses tables :
 ```bash
+npx prisma generate
 npx prisma migrate dev
 ```
 **Note :** Cette commande va également lancer automatiquement le script de **Seed** (`prisma/seed.ts`) pour remplir le dictionnaire de mots et la liste des succès.
