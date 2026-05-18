@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { DatabaseService } from '../../services/database.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +13,7 @@ import { DatabaseService } from '../../services/database.service';
 export class HomeComponent {
   fb = inject(FormBuilder);
   router = inject(Router);
-  dbService = inject(DatabaseService);
+  authService = inject(AuthService);
 
   loginForm = this.fb.group({
     pseudo: ['', [Validators.required, Validators.minLength(3)]]
@@ -22,7 +22,7 @@ export class HomeComponent {
   async onSubmit() {
     if (this.loginForm.valid) {
       const pseudo = this.loginForm.value.pseudo!;
-      const user = await this.dbService.login(pseudo);
+      const user = await this.authService.login(pseudo);
       
       if (user) {
         this.router.navigate(['/game']);

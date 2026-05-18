@@ -1,5 +1,5 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
-import { DatabaseService } from '../../services/database.service';
+import { AuthService } from '../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { User } from '../../models/types';
 
@@ -11,13 +11,13 @@ import { User } from '../../models/types';
   styleUrl: './users-list.component.css'
 })
 export class UsersListComponent implements OnInit {
-  dbService = inject(DatabaseService);
+  authService = inject(AuthService);
   router = inject(Router);
   
   users = signal<User[]>([]);
 
   async ngOnInit() {
-    const data = await this.dbService.getAllUsers();
+    const data = await this.authService.getAllUsers();
     this.users.set(data);
   }
 

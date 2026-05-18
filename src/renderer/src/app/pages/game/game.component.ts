@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { DatabaseService } from '../../services/database.service';
+import { GameService } from '../../services/game.service';
+import { AuthService } from '../../services/auth.service';
 import { GameBoardComponent } from '../../components/game-board.component';
 import { KeyboardComponent } from '../../components/keyboard.component';
 import { Router } from '@angular/router';
@@ -12,23 +13,22 @@ import { Router } from '@angular/router';
   styleUrl: './game.component.css'
 })
 export class GamePageComponent {
-  dbService = inject(DatabaseService);
+  gameService = inject(GameService);
+  authService = inject(AuthService);
   router = inject(Router);
 
   onStartGame() {
-    this.dbService.startNewGame();
+    this.gameService.startNewGame();
   }
 
   onPlayLetter(letter: string) {
-    this.dbService.playLetter(letter);
+    this.gameService.playLetter(letter);
   }
 
   goHome() {
-    // On nettoie la session de jeu avant de partir
-    this.dbService.currentWord.set(null);
-    this.dbService.guessedLetters.set([]);
-    this.dbService.currentUser.set(null);
-    this.dbService.newAchievements.set([]);
+    // La logique de nettoyage est déléguée au service !
+    this.gameService.resetSession();
+    this.authService.logout();
     this.router.navigate(['/']);
   }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
-import { DatabaseService } from '../../services/database.service';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common'; // Requis pour le pipe 'date'
 import { UserHistory } from '../../models/types';
@@ -12,19 +12,19 @@ import { UserHistory } from '../../models/types';
   styleUrl: './history.component.css'
 })
 export class HistoryComponent implements OnInit {
-  dbService = inject(DatabaseService);
+  authService = inject(AuthService);
   router = inject(Router);
   
   playerData = signal<UserHistory | null>(null);
 
   async ngOnInit() {
-    const user = this.dbService.currentUser();
+    const user = this.authService.currentUser();
     if (!user) {
       this.router.navigate(['/']); // Sécurité : si aucun utilisateur n'est connecté
       return;
     }
 
-    const history = await this.dbService.getHistory(user.id);
+    const history = await this.authService.getHistory(user.id);
     this.playerData.set(history);
   }
 

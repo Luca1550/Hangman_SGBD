@@ -1,5 +1,5 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
-import { DatabaseService } from '../../services/database.service';
+import { AuthService } from '../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { UserAchievement } from '../../models/types';
@@ -12,7 +12,7 @@ import { UserAchievement } from '../../models/types';
   styleUrl: './user-achievements.component.css'
 })
 export class UserAchievementsComponent implements OnInit {
-  dbService = inject(DatabaseService);
+  authService = inject(AuthService);
   router = inject(Router);
   route = inject(ActivatedRoute);
 
@@ -22,7 +22,7 @@ export class UserAchievementsComponent implements OnInit {
     // On récupère l'ID passé en paramètre de l'URL
     const userId = Number(this.route.snapshot.paramMap.get('id'));
     if (userId) {
-      const data = await this.dbService.getUserAchievements(userId);
+      const data = await this.authService.getUserAchievements(userId);
       this.achievements.set(data);
     }
   }

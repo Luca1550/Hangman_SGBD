@@ -1,6 +1,6 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
-import { DatabaseService } from '../../services/database.service';
+import { DictionaryService } from '../../services/dictionary.service';
 import { Router } from '@angular/router';
 import { Category, Word, Difficulty } from '../../models/types';
 
@@ -12,7 +12,7 @@ import { Category, Word, Difficulty } from '../../models/types';
   styleUrl: './admin-words.component.css'
 })
 export class AdminWordsComponent implements OnInit {
-  dbService = inject(DatabaseService);
+  dictionaryService = inject(DictionaryService);
   router = inject(Router);
   fb = inject(FormBuilder);
   
@@ -38,19 +38,19 @@ export class AdminWordsComponent implements OnInit {
   }
 
   async refreshData() {
-    this.words.set(await this.dbService.getWords());
-    this.categories.set(await (window as any).electronAPI.getCategories()); // On peut appeler directement l'API aussi
-    this.difficulties.set(await this.dbService.getDifficulties());
+    this.words.set(await this.dictionaryService.getWords());
+    this.categories.set(await this.dictionaryService.getCategories()); 
+    this.difficulties.set(await this.dictionaryService.getDifficulties());
   }
 
   async saveNewCategory() {
     if (this.newCategoryCtrl.invalid) return;
-    const name = this.newCategoryCtrl.value!; // On garde la casse d'origine
+    const name = this.newCategoryCtrl.value!; 
     
-    const newCat = await this.dbService.addCategory(name);
+    const newCat = await this.dictionaryService.addCategory(name);
     if (newCat) {
-      await this.refreshData(); // Met à jour la liste des catégories
-      this.wordForm.patchValue({ categoryId: newCat.id }); // Auto-sélectionne la nouvelle catégorie
+      await this.refreshData(); 
+      this.wordForm.patchValue({ categoryId: newCat.id }); 
       this.isAddingCategory.set(false);
       this.newCategoryCtrl.reset();
     }
@@ -64,13 +64,12 @@ export class AdminWordsComponent implements OnInit {
     if (!category) return;
 
     if (confirm(`Voulez-vous vraiment supprimer la catégorie "${category.name}" ?`)) {
-      const result = await this.dbService.deleteCategory(categoryId);
+      const result = await this.dictionaryService.deleteCategory(categoryId);
       
       if (result.success) {
-        this.wordForm.patchValue({ categoryId: '' }); // Déselectionne la catégorie
+        this.wordForm.patchValue({ categoryId: '' }); 
         this.refreshData();
       } else {
-        // Affiche l'erreur (ex: Contrainte de clé étrangère RESTRICT)
         alert(result.message);
       }
     }
@@ -88,9 +87,9 @@ export class AdminWordsComponent implements OnInit {
     };
 
     if (this.isEditing()) {
-      await this.dbService.updateWord({ id: this.editingWordId, ...data });
+      await this.dictionaryService.updateWord({ id: this.editingWordId, ...data });
     } else {
-      await this.dbService.addWord(data);
+      await this.dictionaryService.addWord(data);
     }
 
     this.wordForm.reset();
@@ -118,7 +117,7 @@ export class AdminWordsComponent implements OnInit {
 
   async deleteWord(id: number) {
     if (confirm("Voulez-vous supprimer ce mot ?")) {
-      await this.dbService.deleteWord(id);
+      await this.dictionaryService.deleteWord(id);
       this.refreshData();
     }
   }
