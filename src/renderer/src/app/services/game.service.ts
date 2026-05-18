@@ -1,5 +1,6 @@
 import { Injectable, signal, computed, effect, inject } from '@angular/core';
-import { Word, Achievement } from '../models/types';
+import { Word } from '../models/word';
+import { Achievement } from '../models/achievement';
 import { AuthService } from './auth.service';
 
 @Injectable({

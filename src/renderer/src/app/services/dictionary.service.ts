@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Category, Word, Difficulty } from '../models/types';
+import { Category } from '../models/category';
+import { Word } from '../models/word';
+import { Difficulty } from '../models/difficulty';
 
 @Injectable({
   providedIn: 'root'

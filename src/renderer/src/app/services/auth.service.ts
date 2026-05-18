@@ -1,5 +1,7 @@
 import { Injectable, signal } from '@angular/core';
-import { User, UserHistory, UserAchievement } from '../models/types';
+import { User } from '../models/user';
+import { UserHistory } from '../models/user-history';
+import { UserAchievement } from '../models/user-achievement';
 
 declare global {
   interface Window {

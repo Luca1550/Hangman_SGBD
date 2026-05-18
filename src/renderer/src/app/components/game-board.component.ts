@@ -1,5 +1,5 @@
 import { Component, input, signal, effect } from '@angular/core';
-import { Word } from '../models/types';
+import { Word } from '../models/word';
 
 @Component({
   selector: 'app-game-board',

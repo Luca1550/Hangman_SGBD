@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { User } from '../../models/types';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-admin-users',

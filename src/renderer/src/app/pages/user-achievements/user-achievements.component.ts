@@ -2,7 +2,7 @@ import { Component, OnInit, signal, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { UserAchievement } from '../../models/types';
+import { UserAchievement } from '../../models/user-achievement';
 
 @Component({
   selector: 'app-user-achievements',

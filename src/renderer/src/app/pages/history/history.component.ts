@@ -2,7 +2,7 @@ import { Component, OnInit, signal, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common'; // Requis pour le pipe 'date'
-import { UserHistory } from '../../models/types';
+import { UserHistory } from '../../models/user-history';
 
 @Component({
   selector: 'app-history',
