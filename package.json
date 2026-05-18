@@ -2,7 +2,7 @@
   "name": "hangman",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/main/index.js",
+  "main": "dist/main/main.js",
   "directories": {
     "doc": "docs"
   },

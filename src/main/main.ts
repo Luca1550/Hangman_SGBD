@@ -15,7 +15,7 @@ function createWindow() {
         height: 700,
         webPreferences: {
             // 2. On indique à Electron où se trouve Preload
-            preload: path.join(__dirname, '../preload/index.js'),
+            preload: path.join(__dirname, '../preload/preload.js'),
             contextIsolation: true, // Sécurité obligatoire
             nodeIntegration: false  // Sécurité obligatoire
         }
