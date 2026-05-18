@@ -104,13 +104,13 @@ ipcMain.handle('db:save-game', async (event, data: any) => {
 
         if (user) {
             const allAchievements = await prisma.achievement.findMany();
-            const earnedAchievementNames = user.achievements.map(ua => ua.achievement.name);
-            const newUnlocks = [];
+            const earnedAchievementNames = user.achievements.map((ua: any) => ua.achievement.name);
+            const newUnlocks: any[] = [];
 
             // Helper function to check and grant
             const checkAndGrant = (name: string, condition: boolean) => {
                 if (condition && !earnedAchievementNames.includes(name)) {
-                    const ach = allAchievements.find(a => a.name === name);
+                    const ach = allAchievements.find((a: any) => a.name === name);
                     if (ach) newUnlocks.push(ach);
                 }
             };
@@ -119,7 +119,7 @@ ipcMain.handle('db:save-game', async (event, data: any) => {
             checkAndGrant('Première partie', user.games.length >= 1);
 
             // Règle 2: 5 victoires
-            const wins = user.games.filter(g => g.status === 'GAGNE').length;
+            const wins = user.games.filter((g: any) => g.status === 'GAGNE').length;
             checkAndGrant('5 victoires', wins >= 5);
 
             // Règle 3: Zéro pointé
@@ -131,7 +131,7 @@ ipcMain.handle('db:save-game', async (event, data: any) => {
             // Règle 5: Complétionniste (S'ils ont obtenu les 4 autres)
             const totalEarnedAndNew = earnedAchievementNames.length + newUnlocks.length;
             if (totalEarnedAndNew === allAchievements.length - 1 && !earnedAchievementNames.includes('Complétionniste')) {
-                const ach = allAchievements.find(a => a.name === 'Complétionniste');
+                const ach = allAchievements.find((a: any) => a.name === 'Complétionniste');
                 if (ach) newUnlocks.push(ach);
             }
 
