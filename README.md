@@ -51,13 +51,3 @@ Ouvrez un second terminal à la racine du projet (là où se trouve ce README) e
 npm start
 ```
 La fenêtre du jeu va s'ouvrir automatiquement !
-
----
-
-## 🏗️ Architecture et Conformité aux Exigences
-
-Ce projet respecte strictement les contraintes imposées :
-*   **Clean Architecture :** Le dossier `src/main` (Backend) est le seul à communiquer avec Prisma. L'interface Angular (`src/renderer`) ne communique avec le backend que via les messages IPC sécurisés définis dans `src/preload`.
-*   **Modélisation Relationnelle :** La base contient 7 modèles distincts. La relation N:M entre les Utilisateurs et les Succès est gérée par une table de jonction explicite (`UserAchievement`).
-*   **Intégrité des données :** La suppression d'un utilisateur dans le panel d'administration entraîne la suppression en cascade (`ON DELETE CASCADE`) de toutes ses parties et succès. La suppression d'une catégorie est impossible si elle contient encore des mots (`RESTRICT`).
-*   **Angular Moderne :** Utilisation exclusive de la nouvelle syntaxe (Signals, Computed, @for, @if), injection de dépendances (`inject()`), composants Standalone, routage, et formulaires réactifs (`ReactiveFormsModule`).
