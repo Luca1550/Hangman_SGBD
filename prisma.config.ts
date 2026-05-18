@@ -10,6 +10,6 @@ export default defineConfig({
     seed: "npx ts-node prisma/seed.ts",
   },
   datasource: {
-    url: process.env["DATABASE_URL"],
+    url: "file:./dev.db", // URL écrite en dur pour faciliter l'installation (SQLite local)
   },
 });

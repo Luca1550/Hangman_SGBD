@@ -28,11 +28,17 @@ cd ../..
 ```
 
 ### 2. Initialisation de la Base de Données (Prisma)
-Le projet utilise SQLite. Pour créer le fichier de base de données `dev.db` et y injecter les données de départ (les mots, les catégories, les difficultés et la liste des succès), restez à la racine du projet et lancez le script de "Seed" :
+Le projet utilise SQLite. Lors de votre première installation, le fichier de base de données local `dev.db` n'existe pas encore. 
+
+Restez à la racine du projet et lancez cette commande :
 ```bash
-npx prisma db seed
+npx prisma migrate dev
 ```
-*(Si le fichier `dev.db` n'existe pas, vous pouvez utiliser la commande `npx prisma migrate dev` pour le générer avant de faire le seed).*
+**Que fait cette commande ?**
+1. Elle crée le fichier `dev.db`.
+2. Elle construit les 7 tables du schéma relationnel.
+3. Elle génère le `PrismaClient` adapté à l'environnement.
+4. **Elle exécute automatiquement le script de Seed** (`prisma/seed.ts`) pour peupler la base avec le dictionnaire de mots par défaut et la liste des succès !
 
 ### 3. Démarrage de l'Application
 L'architecture sépare le Frontend (Angular) du Backend (Electron). Il faut donc lancer deux processus en parallèle.
