@@ -3,18 +3,7 @@ import { Component, input, output } from '@angular/core';
 @Component({
   selector: 'app-keyboard',
   standalone: true,
-  template: `
-    <div>
-      @for (letter of alphabet; track letter) {
-        <button 
-          (click)="onKeyClick(letter)"
-          [disabled]="disabledLetters().includes(letter)"
-          style="margin: 5px; padding: 10px 15px; font-size: 18px; cursor: pointer;">
-          {{ letter }}
-        </button>
-      }
-    </div>
-  `
+  templateUrl: './keyboard.component.html'
 })
 export class KeyboardComponent {
   alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');

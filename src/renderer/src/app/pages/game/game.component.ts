@@ -1,8 +1,8 @@
 import { Component, inject, HostListener } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { AuthService } from '../../services/auth.service';
-import { GameBoardComponent } from '../../components/game-board.component';
-import { KeyboardComponent } from '../../components/keyboard.component';
+import { GameBoardComponent } from '../../components/game-board/game-board.component';
+import { KeyboardComponent } from '../../components/keyboard/keyboard.component';
 import { Router } from '@angular/router';
 
 @Component({
