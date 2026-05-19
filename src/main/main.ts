@@ -123,7 +123,7 @@ ipcMain.handle('db:save-game', async (event, data: any) => {
             checkAndGrant('5 victoires', wins >= 5);
 
             // Règle 3: Zéro pointé
-            checkAndGrant('Zéro pointé', data.status === 'PERDU');
+            checkAndGrant('Zéro pointé', data.status === 'PERDU' && data.errors_count === data.total_guesses);
 
             // Règle 4: Partie parfaite
             checkAndGrant('Partie parfaite', data.status === 'GAGNE' && data.errors_count === 0);

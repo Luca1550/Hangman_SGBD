@@ -58,7 +58,8 @@ export class GameService {
       difficultyId: word.difficultyId,
       errors_count: this.errorCount(),
       status: status,
-      score: finalScore
+      score: finalScore,
+      total_guesses: this.guessedLetters().length
     });
 
     if (result && result.newAchievements && result.newAchievements.length > 0) {
