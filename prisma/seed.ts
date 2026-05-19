@@ -24,13 +24,13 @@ async function main() {
   const animals = await prisma.category.upsert({
     where: { name: 'Animaux' },
     update: {},
-    create: { name: 'Animaux', description: 'Mots sur le thème des animaux' },
+    create: { name: 'Animaux' },
   })
 
   const countries = await prisma.category.upsert({
     where: { name: 'Pays' },
     update: {},
-    create: { name: 'Pays', description: 'Noms de pays du monde' },
+    create: { name: 'Pays' },
   })
 
   // 3. Mots
